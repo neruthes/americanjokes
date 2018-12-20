@@ -94,7 +94,9 @@
             console.log(app.jokeText);
             document.getElementById('js-JokeText').innerHTML = app.jokeTextHtml;
 
-            document.getElementById('js-JokeMetadata').innerHTML = app.jokeRawText.trim().split('\n\n----\n\n')[0].trim().split('\n').map(function (x) { return '<p>' + x.replace(/(https:\/\/[a-zA-Z0-9\-\.\/\#\?]+)/g, '<a href="$1" target="_blank">$1</a>') + '</p>'; }).join('');
+            document.getElementById('js-JokeMetadata').innerHTML = app.jokeRawText.trim().split('\n\n----\n\n')[0].trim().split('\n').map(function (x) {
+                return '<p>' + x.replace(/(https:\/\/[a-zA-Z0-9\-\.\/\#\?]+)/g, '<a href="$1" target="_blank">$1</a>').replace(/>https:\/\/([a-z0-9\-.]+)[a-zA-Z0-9\-\.\/\#\?]+?</g, '>$1<') + '</p>';
+            }).join('');
         };
         var loadJoke = function () {
             var jid = location.hash.slice(1);
@@ -150,7 +152,7 @@
                     <div class="footer">
                         <div class="">
                             &copy; 2018<script type="text/javascript">
-                                document.write((new Date()).getFullYear() == 2015 ? '' : '-' + (new Date()).getFullYear() );
+                                document.write((new Date()).getFullYear() == 2018 ? '' : '-' + (new Date()).getFullYear() );
                             </script> Neruthes (a.k.a. J.N.) &amp; various contributers
                         </div>
                         <div class="">
