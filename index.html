@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>American Jokes</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript">
+        var app = {
+            totalJokes: 13
+        };
+        </script>
+        <style media="screen">
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            font-family: -apple-system, Tahoma, sans-serif;
+            font-size: 16px;
+            padding: 0;
+            margin: 0;
+        }
+        .cont {
+            background: #F8F8F8;
+        }
+        .cont-inner {
+            background: #FFF;
+            max-width: 700px;
+            min-height: 100vh;
+            margin: 0px auto;
+        }
+        .header {
+            font-size: 30px;
+            text-align: center;
+            padding: 60px 0px 0px;
+        }
+        .content {
+            max-width: 560px;
+            padding: 40px 20px;
+            margin: 0 auto;
+        }
+        .content--joke-text {
+            font-size: 20px;
+        }
+        .content--joke-metadata {
+            font-size: 14px;
+            color: #999;
+            padding: 10px 0px 10px;
+        }
+        .content--joke-metadata a {
+            color: #999;
+        }
+        .content--joke-control-area {
+            padding: 20px 0 0;
+        }
+        .content--joke-control-area button {
+            font-size: 16px;
+            color: #FFF;
+            background: #09E;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 40px;
+            cursor: pointer;
+        }
+        .content--joke-control-area button:hover {
+            background: #08D;
+        }
+        .footer {
+            font-size: 14px;
+            color: #999;
+            text-align: center;
+            padding: 0px 0px 80px;
+        }
+        .footer a {
+            color: #999;
+        }
+        </style>
+        <script type="text/javascript">
+    	var pickRandomly = function (arr_length) {
+    		return Math.floor(Math.random()*arr_length);
+    	};
+    	var isValidJokeId = function (jid) {
+    		return jid < app.totalJokes && jid >= 0 ? true : false;
+    	};
+    	var documentLoadEventHandler = function () {
+            hashChangeEventHandler();
+            setTimeout(function () {
+    			document.getElementById('cont').style.opacity = "1";
+    		}, 200);
+    	};
+        var jokeDidLoadEventHandler = function () {
+            app.jokeRawText = app.jokeXhr.responseText;
+            app.jokeText = app.jokeRawText.trim().split('\n\n----\n\n')[1];
+            app.jokeTextHtml = app.jokeText.split('\n\n').map(function (x) { return '<p>' + x.replace(/\*(.*?)\*/g, '<strong>$1</strong>') + '</p>' }).join('');
+            console.log(app.jokeText);
+            document.getElementById('js-JokeText').innerHTML = app.jokeTextHtml;
+
+            document.getElementById('js-JokeMetadata').innerHTML = app.jokeRawText.trim().split('\n\n----\n\n')[0].trim().split('\n').map(function (x) { return '<p>' + x.replace(/(https:\/\/[a-zA-Z0-9\-\.\/\#\?]+)/g, '<a href="$1" target="_blank">$1</a>') + '</p>'; }).join('');
+        };
+        var loadJoke = function () {
+            var jid = location.hash.slice(1);
+            document.getElementById('js-JokeId').innerHTML = jid;
+            document.title = 'American Jokes (' + jid + '/12)';
+            app.jokeXhr = new XMLHttpRequest();
+            app.jokeXhr.open('GET', './db/' + jid + '.txt');
+            app.jokeXhr.addEventListener('load', jokeDidLoadEventHandler);
+            app.jokeXhr.send();
+        };
+    	var hashChangeEventHandler = function (ev) {
+    		// ev.preventDefault();
+            if (isNaN(Number(location.hash.slice(1))) || ! /^#\d+$/.test(location.hash) || location.hash == '' || location.hash == '#' || !isValidJokeId(location.hash.slice(1))) {
+                // Invalid hash or no hash set
+                console.log('Invalid hash or no hash');
+                location.assign('./#' + pickRandomly(app.totalJokes));
+                location.reload();
+            } else {
+                // Hash set
+                loadJoke();
+            };
+    	};
+        window.addEventListener('hashchange', hashChangeEventHandler);
+        </script>
+    </head>
+    <body onload="documentLoadEventHandler()">
+        <div class="cont" id="cont" style="opacity: 0;">
+            <div class="cont-inner">
+                <div class="">
+                    <div class="header">
+                        American Jokes (<span id="js-JokeId"></span>/12)
+                    </div>
+                    <div class="content">
+                        <div class="content--joke-text" id="js-JokeText">
+                        </div>
+                        <div class="content--joke-metadata" id="js-JokeMetadata">
+                        </div>
+                        <div class="content--joke-control-area">
+                            <div class="" style="text-align: center;">
+                                <button type="button" name="button" id="js-BtnAnotherJoke">Another Joke</button>
+                                <script type="text/javascript">
+                                document.getElementById('js-BtnAnotherJoke').addEventListener('click', function () {
+                                    var jid = pickRandomly(app.totalJokes);
+                                    while ('#' + jid === location.hash) {
+                                        jid = pickRandomly(app.totalJokes);
+                                    }
+                                    location.assign('./#' + jid);
+                                });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <div class="">
+                            &copy; 2018<script type="text/javascript">
+                                document.write((new Date()).getFullYear() == 2015 ? '' : '-' + (new Date()).getFullYear() );
+                            </script> Neruthes (a.k.a. J.N.) &amp; various contributers
+                        </div>
+                        <div class="">
+                            <a href="https://github.com/neruthes/americanjokes">Submit a joke on GitHub</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
