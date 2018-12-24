@@ -62,7 +62,7 @@
             cursor: pointer;
         }
         .content--joke-control-area button:hover {
-            background: #08D;
+            opacity: 0.85;
         }
         .footer {
             font-size: 14px;
@@ -144,6 +144,31 @@
                                         jid = pickRandomly(app.totalJokes);
                                     }
                                     location.assign('./#' + jid);
+                                });
+                                </script>
+                                <button type="button" name="button" id="js-CopyJoke" style="background: #F82;">Copy to Share</button>
+                                <script type="text/javascript">
+                                document.getElementById('js-CopyJoke').addEventListener('click', function () {
+                                    var textArea = document.createElement("textarea");
+                                    textArea.value = document.getElementById('js-JokeText').innerText + '\n\nvia ' + location.href;
+                                    document.body.appendChild(textArea);
+                                    textArea.focus();
+                                    textArea.select();
+                                    try {
+                                        var successful = document.execCommand('copy');
+                                        var msg = successful ? 'successful' : 'unsuccessful';
+                                        console.log('Copying text command was ' + msg);
+                                        if (msg === 'unsuccessful') {
+                                            window.prompt('Copy the text below to share: ', document.getElementById('js-JokeText').innerText.trim() + '\n\nvia ' + location.href);
+                                        } else {
+                                            window.alert('Joke copied.')
+                                        };
+                                    } catch (e) {
+                                        window.prompt('Copy the text below to share: ', document.getElementById('js-JokeText').innerText.trim() + '\n\nvia ' + location.href);
+                                    } finally {
+                                        document.body.removeChild(textArea);
+                                        window.scrollTo(0, 0);
+                                    }
                                 });
                                 </script>
                             </div>
