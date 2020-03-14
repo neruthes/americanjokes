@@ -6,9 +6,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript">
         var app = {
-            totalJokes: 13
+            totalJokes: 24
         };
         </script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131937668-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-131937668-1');
+        </script>
+
         <style media="screen">
         * {
             box-sizing: border-box;
@@ -105,7 +115,7 @@
         var loadJoke = function () {
             var jid = location.hash.slice(1);
             document.getElementById('js-JokeId').innerHTML = jid;
-            document.title = 'American Jokes (' + jid + '/12)';
+            document.title = 'American Jokes (' + jid + '/23)';
             app.jokeXhr = new XMLHttpRequest();
             app.jokeXhr.open('GET', './db/' + jid + '.txt');
             app.jokeXhr.addEventListener('load', jokeDidLoadEventHandler);
@@ -131,7 +141,7 @@
             <div class="cont-inner">
                 <div class="">
                     <div class="header">
-                        American Jokes (<span id="js-JokeId"></span>/12)
+                        American Jokes (<span id="js-JokeId"></span>/23)
                     </div>
                     <div class="content">
                         <div class="content--joke-text" id="js-JokeText">

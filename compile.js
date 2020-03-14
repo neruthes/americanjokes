@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs');
-const markdown = require('markdown-it')();
 const exec = require('child_process').exec;
 
 const indexTemplate = fs.readFileSync('index.template.html').toString();
